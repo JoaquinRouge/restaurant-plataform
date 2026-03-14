@@ -2,8 +2,6 @@ package com.joaquinrouge.restaurant.order.controller;
 
 import com.joaquinrouge.restaurant.order.dto.CreateOrderDto;
 import com.joaquinrouge.restaurant.order.dto.ItemDto;
-import com.joaquinrouge.restaurant.order.exception.InvalidOrderException;
-import com.joaquinrouge.restaurant.order.exception.OrderNotFoundException;
 import com.joaquinrouge.restaurant.order.model.Order;
 import com.joaquinrouge.restaurant.order.service.IOrderService;
 import org.springframework.http.HttpStatus;
@@ -24,12 +22,9 @@ public class OrderController {
 
     @GetMapping()
     public ResponseEntity<List<Order>> findAll(){
-        return ResponseEntity.ok(orderService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<List<Order>> findByUserId(@PathVariable Long id){
-        return ResponseEntity.ok(orderService.findByUserId(id));
+        //TODO - extraer el restaurant id de los headers
+        Long restaurantId = 1L;
+        return ResponseEntity.ok(orderService.findAll(restaurantId));
     }
 
     @PostMapping()

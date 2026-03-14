@@ -1,7 +1,10 @@
 package com.joaquinrouge.restaurant.order.model;
 
+import com.joaquinrouge.restaurant.order.enums.OrderStatus;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,26 +16,32 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    private Long restaurantId;
+    private Long tableId;
+    private Long tableSessionId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
 
-    private LocalDate date;
-    private double total;
+    private OrderStatus status;
+    private BigDecimal total;
     private String comment;
+    private Instant createdAt;
 
     public Order(){
 
     }
 
-    public Order(Long id, Long userId, List<OrderItem> items, LocalDate date, double total, String comment) {
+    public Order(Long id, Long restaurantId, Long tableId, Long tableSessionId, List<OrderItem> items, OrderStatus status, BigDecimal total, String comment, Instant createdAt) {
         this.id = id;
-        this.userId = userId;
+        this.restaurantId = restaurantId;
+        this.tableId = tableId;
+        this.tableSessionId = tableSessionId;
         this.items = items;
-        this.date = date;
+        this.status = status;
         this.total = total;
         this.comment = comment;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -43,12 +52,28 @@ public class Order {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setRestaurantId(Long restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public Long getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(Long tableId) {
+        this.tableId = tableId;
+    }
+
+    public Long getTableSessionId() {
+        return tableSessionId;
+    }
+
+    public void setTableSessionId(Long tableSessionId) {
+        this.tableSessionId = tableSessionId;
     }
 
     public List<OrderItem> getItems() {
@@ -59,19 +84,19 @@ public class Order {
         this.items = items;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public OrderStatus getStatus() {
+        return status;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
@@ -81,5 +106,13 @@ public class Order {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 }

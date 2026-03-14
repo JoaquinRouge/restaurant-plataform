@@ -8,8 +8,7 @@ import java.util.List;
 
 public interface IOrderService {
 
-    List<Order> findAll();
-    List<Order> findByUserId(Long userId);
+    List<Order> findAll(Long restaurantId);
     Order createOrder(CreateOrderDto orderData);
     Order updateOrder(Long id,List<ItemDto> items);
     void deleteOrder(Long id);

@@ -1,17 +1,19 @@
 package com.joaquinrouge.restaurant.order.dto;
 
+import java.math.BigDecimal;
+
 public class ProductDto {
 
     private Long id;
     private String name;
     private String description;
-    private double price;
+    private BigDecimal price;
 
     public ProductDto(){
 
     }
 
-    public ProductDto(Long id, String name, String description, double price) {
+    public ProductDto(Long id, String name, String description, BigDecimal price) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -42,11 +44,11 @@ public class ProductDto {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 }

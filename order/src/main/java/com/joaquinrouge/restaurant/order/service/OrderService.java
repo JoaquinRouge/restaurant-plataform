@@ -4,6 +4,7 @@ import com.joaquinrouge.restaurant.order.client.IProductClient;
 import com.joaquinrouge.restaurant.order.dto.CreateOrderDto;
 import com.joaquinrouge.restaurant.order.dto.ItemDto;
 import com.joaquinrouge.restaurant.order.dto.ProductDto;
+import com.joaquinrouge.restaurant.order.enums.OrderStatus;
 import com.joaquinrouge.restaurant.order.exception.InvalidOrderException;
 import com.joaquinrouge.restaurant.order.exception.OrderNotFoundException;
 import com.joaquinrouge.restaurant.order.model.Order;
@@ -12,6 +13,8 @@ import com.joaquinrouge.restaurant.order.repository.IOrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +31,9 @@ public class OrderService implements IOrderService{
     }
 
     @Override
-    public List<Order> findAll() {
-        return orderRepository.findAll();
-    }
-
-    @Override
-    public List<Order> findByUserId(Long userId){
-        return orderRepository.findByUserId(userId).orElseThrow(
-                ()-> new OrderNotFoundException("Order not found for user id " + userId)
+    public List<Order> findAll(Long restaurantId) {
+        return orderRepository.findByRestaurantId(restaurantId).orElseThrow(
+                ()-> new OrderNotFoundException("Orders not found for restaurant id " + restaurantId)
         );
     }
 
@@ -45,7 +43,7 @@ public class OrderService implements IOrderService{
 
         Order order = new Order();
         List<OrderItem> orderItems = new ArrayList<>();
-        double total = 0;
+        BigDecimal total = BigDecimal.ZERO;
 
         for(ItemDto item : orderData.items()){
 
@@ -62,14 +60,18 @@ public class OrderService implements IOrderService{
 
              orderItems.add(orderItem);
 
-             total += product.getPrice();
+             total = total.add(product.getPrice().multiply(BigDecimal.valueOf(item.quantity())));
 
         }
 
+        order.setRestaurantId(orderData.restaurantId());
+        order.setTableId(orderData.tableId());
+        order.setTableSessionId(orderData.tableSessionId());
         order.setItems(orderItems);
-        order.setComment(orderData.comment());
+        order.setStatus(OrderStatus.CREATED);
         order.setTotal(total);
-        order.setDate(LocalDate.now());
+        order.setComment(orderData.comment());
+        order.setCreatedAt(Instant.now());
 
         return orderRepository.save(order);
     }
