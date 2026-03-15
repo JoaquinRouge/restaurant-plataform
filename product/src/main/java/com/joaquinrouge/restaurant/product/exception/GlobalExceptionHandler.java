@@ -23,6 +23,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(new ApiError(ex.getMessage()));
     }
 
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ApiError> handleCategoryNotFoundExecption(CategoryNotFoundException e){
+        return ResponseEntity.badRequest().body(new ApiError(e.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidCategoryException.class)
+    public ResponseEntity<ApiError> handleInvalidCategoryException(InvalidCategoryException e){
+        return ResponseEntity.badRequest().body(new ApiError(e.getMessage()));
+    }
+
     public record ApiError(String message) {
     }
 

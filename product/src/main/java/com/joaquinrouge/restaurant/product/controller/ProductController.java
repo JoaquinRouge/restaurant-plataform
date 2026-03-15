@@ -1,8 +1,6 @@
 package com.joaquinrouge.restaurant.product.controller;
 
-import com.joaquinrouge.restaurant.product.dto.CreateOrUpdateProductDTO;
-import com.joaquinrouge.restaurant.product.exception.InvalidProductException;
-import com.joaquinrouge.restaurant.product.exception.ProductNotFoundException;
+import com.joaquinrouge.restaurant.product.dto.CreateOrUpdateProductDto;
 import com.joaquinrouge.restaurant.product.model.Product;
 import com.joaquinrouge.restaurant.product.service.IProductService;
 import org.springframework.http.HttpStatus;
@@ -32,21 +30,34 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody CreateOrUpdateProductDTO productDto) {
-        Product created = productService.createProduct(productDto);
+    public ResponseEntity<Product> create(@RequestBody CreateOrUpdateProductDto productDto) {
+
+        //TODO - extraer el restaurantId de los headers
+        Long restaurantId = 1L;
+
+        Product created = productService.createProduct(restaurantId,productDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody CreateOrUpdateProductDTO productDto) {
-        productService.updateProduct(id, productDto);
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody CreateOrUpdateProductDto productDto) {
+
+        //TODO - extraer el restaurantId de los headers
+        Long restaurantId = 1L;
+
+        productService.updateProduct(restaurantId,id, productDto);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        productService.deleteProduct(id);
+
+        //TODO - extraer el restaurantId de los headers
+        Long restaurantId = 1L;
+
+        productService.deleteProduct(restaurantId,id);
         return ResponseEntity.noContent().build();
+
     }
 
 }
